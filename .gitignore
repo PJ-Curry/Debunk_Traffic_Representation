@@ -36,3 +36,19 @@ code/NetMamba/cuda/
 code/netFound/src/pre_process/packets_processing_src/build
 
 
+
+# Local Codex / experiment artifacts
+.codex/
+backups/
+code/ShallowML/outputs/
+code/ShallowML/AutogluonModels/
+code/ShallowML/pcapencoder_smoke/
+code/ShallowML/pcapencoder_mini_checkpoint/
+
+# Large model/checkpoint artifacts
+*.pth
+*.pt
+*.ckpt
+*.safetensors
+.codex
+.codex/

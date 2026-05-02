@@ -125,6 +125,7 @@ def scale_lr(lr):
 
 
 def generate_experiment_report(exp_id, dict_parameters, dict_results):
+    os.makedirs("output_experiments", exist_ok=True)
     f_out = open(f"output_experiments/{exp_id}.txt", "w+")
     print(
         r"""  ___                                                                   ___  

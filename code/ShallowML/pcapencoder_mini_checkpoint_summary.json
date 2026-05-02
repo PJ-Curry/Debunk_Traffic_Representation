@@ -1,0 +1,99 @@
+{
+  "date": "2026-05-02",
+  "purpose": "Pcap-Encoder mini Denoiser -> QA -> Classification smoke test on USTC-binary split0; not a formal Pcap-Encoder reproduction result.",
+  "hardware_observation": {
+    "gpu": "NVIDIA GeForce RTX 4060 Laptop GPU",
+    "gpu_memory_mb": 8188,
+    "oom_observed": false,
+    "notes": "Denoiser/QA used roughly 6GB+ during mini training; classification with fix_encoder and batch_size=2 used roughly 1.5-1.6GB."
+  },
+  "denoiser": {
+    "train_rows": 2000,
+    "test_rows": 500,
+    "train_data": "code/ShallowML/pcapencoder_mini_checkpoint/data/denoiser_train_2k.parquet",
+    "test_data": "code/ShallowML/pcapencoder_mini_checkpoint/data/denoiser_test_500.parquet",
+    "epochs": 1,
+    "batch_size": 1,
+    "model_name": "t5-base",
+    "tokenizer_name": "t5-base",
+    "finetuned_path_model": "Empty",
+    "weights_generated": true,
+    "weights_path": "code/ShallowML/pcapencoder_mini_checkpoint/results/denoiser/denoiser/supervised/t5-base_standard-tokenizer/MiniDenoiserdenoiser_mini_2k_20260502/task-supervised_lr-5e-06_epochs-1_batch-1/seed_43/best_model/weights.pth",
+    "weights_size_bytes": 891733181
+  },
+  "qa": {
+    "train_rows": 2000,
+    "test_rows": 500,
+    "train_data": "code/ShallowML/pcapencoder_mini_checkpoint/data/qa_train_hard_2k.parquet",
+    "test_data": "code/ShallowML/pcapencoder_mini_checkpoint/data/qa_test_hard_500.parquet",
+    "epochs": 1,
+    "batch_size": 1,
+    "learning_rate": 0.0005,
+    "model_name": "t5-base",
+    "tokenizer_name": "t5-base",
+    "initialized_from": "mini Denoiser best_model",
+    "weights_generated": true,
+    "weights_path": "code/ShallowML/pcapencoder_mini_checkpoint/results/QA/QA/supervised/t5-base_standard-tokenizer/MiniQAqa_hard_mini_2k_from_denoiser_20260502/task-supervised_lr-0.0005_epochs-1_batch-1/seed_43/best_model/weights.pth",
+    "weights_size_bytes": 891733181,
+    "evaluation": {
+      "Total_accuracy": 17.5,
+      "loss": 2.042278192341328,
+      "accIPid": 12.7,
+      "accIPttl": 0.0,
+      "accchecksum_check": 39.13,
+      "accchk3L": 0.0,
+      "accdstIP": 0.0,
+      "acclast_header3L_byte": 43.18,
+      "acclen_payload": 64.1,
+      "accsrcIP": 0.0
+    },
+    "post_evaluation_error": {
+      "occurred": true,
+      "error": "FileNotFoundError when writing output_experiments/qa_hard_mini_2k_from_denoiser_20260502.txt",
+      "checkpoint_and_evaluation_generated_before_error": true,
+      "fix": "Create output_experiments directory before opening the report file."
+    }
+  },
+  "classification": {
+    "checkpoint": "mini QA best_model",
+    "common_params": {
+      "epochs": 1,
+      "batch_size": 2,
+      "fix_encoder": true,
+      "learning_rate": 0.001,
+      "loss": "normal"
+    },
+    "raw": {
+      "data_dir": "code/ShallowML/pcapencoder_smoke/ustc_binary_raw_split0",
+      "accuracy": 0.8339999914169312,
+      "macro_f1": 0.8319064690329592,
+      "micro_f1": 0.834,
+      "loss": 0.4731287486076355
+    },
+    "mask_top_shortcut": {
+      "data_dir": "code/ShallowML/pcapencoder_smoke/ustc_binary_mask_top_shortcut_split0",
+      "accuracy": 0.7886000275611877,
+      "macro_f1": 0.7874549005238664,
+      "micro_f1": 0.7886,
+      "loss": 0.5242581180095672
+    },
+    "delta_mask_minus_raw": {
+      "accuracy": -0.04539996385574343,
+      "accuracy_percentage_points": -4.539996385574343,
+      "macro_f1": -0.044451568509092805,
+      "macro_f1_percentage_points": -4.4451568509092805,
+      "loss": 0.05112936940193172
+    }
+  },
+  "interpretation": {
+    "can_say": [
+      "The local mini checkpoint pipeline can generate Denoiser and QA weights and load the mini QA checkpoint for downstream classification.",
+      "The raw vs mask_top_shortcut direction matches the ShallowML observation in this mini smoke setting."
+    ],
+    "cannot_say": [
+      "This is not a formal Pcap-Encoder reproduction result.",
+      "The checkpoint is not sufficiently trained and uses only small mini data with one epoch.",
+      "The raw vs mask gap is not a formal shortcut migration conclusion without larger QA/Denoiser training and multi-split evaluation."
+    ]
+  }
+}
