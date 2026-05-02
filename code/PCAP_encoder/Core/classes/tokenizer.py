@@ -19,7 +19,6 @@ class QA_Tokenizer_T5:
             max_length=self.q_len,
             padding="max_length",
             truncation=True,
-            pad_to_max_length=True,
             add_special_tokens=True,
         )
         return question_tokenized
@@ -30,7 +29,6 @@ class QA_Tokenizer_T5:
             max_length=self.t_len,
             padding="max_length",
             truncation=True,
-            pad_to_max_length=True,
             add_special_tokens=True,
         )
         return answer_tokenized
@@ -51,7 +49,6 @@ class QA_Tokenizer_BART:
             max_length=self.q_len,
             padding="max_length",
             truncation=True,
-            pad_to_max_length=True,
             add_special_tokens=True,
         )
         return question_tokenized
@@ -62,7 +59,6 @@ class QA_Tokenizer_BART:
             max_length=self.t_len,
             padding="max_length",
             truncation=True,
-            pad_to_max_length=True,
             add_special_tokens=True,
         )
         return answer_tokenized

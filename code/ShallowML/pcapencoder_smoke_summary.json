@@ -1,0 +1,28 @@
+{
+  "experiment": "Pcap-Encoder USTC-binary split0 smoke test",
+  "date": "2026-05-02",
+  "checkpoint": "Empty",
+  "is_formal_pcapencoder_result": false,
+  "note": "This is a training pipeline smoke test without the official Pcap-Encoder QA checkpoint. Do not use it as a paper reproduction result or a formal shortcut-transfer conclusion.",
+  "data": {
+    "raw": "code/ShallowML/pcapencoder_smoke/ustc_binary_raw_split0",
+    "mask_top_shortcut": "code/ShallowML/pcapencoder_smoke/ustc_binary_mask_top_shortcut_split0"
+  },
+  "test_metrics": {
+    "raw": {
+      "accuracy": 0.9058,
+      "macro_f1": 0.9053,
+      "loss": 0.4073
+    },
+    "mask_top_shortcut": {
+      "accuracy": 0.7858,
+      "macro_f1": 0.7847,
+      "loss": 0.5270
+    },
+    "raw_minus_mask_top_shortcut": {
+      "accuracy": 0.1200,
+      "macro_f1": 0.1206,
+      "loss": -0.1197
+    }
+  }
+}

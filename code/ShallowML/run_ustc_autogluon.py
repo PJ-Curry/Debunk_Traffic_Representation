@@ -12,7 +12,13 @@ from pathlib import Path
 from autogluon.tabular import TabularDataset, TabularPredictor
 
 
-ALLOWED_EXPERIMENTS = {"mask_col4", "mask_top_shortcut"}
+ALLOWED_EXPERIMENTS = {
+    "mask_col4",
+    "mask_ip_basic",
+    "mask_tcp_flags_window",
+    "mask_tcp_options",
+    "mask_top_shortcut",
+}
 NUM_SPLITS = 3
 LABEL = "class"
 EXTRA_METRICS = [
