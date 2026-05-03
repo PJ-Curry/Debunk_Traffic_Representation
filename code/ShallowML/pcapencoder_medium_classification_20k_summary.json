@@ -1,0 +1,91 @@
+{
+  "stage": "20k",
+  "complete": true,
+  "data_root": "code/ShallowML/pcapencoder_medium_classification_20k",
+  "splits": [
+    {
+      "split": 0,
+      "raw": {
+        "success": true,
+        "accuracy": 0.8304499983787537,
+        "macro_f1": 0.8273851258129421,
+        "micro_f1": 0.83045,
+        "loss": 0.48364649644196034,
+        "evaluation_file": "code/ShallowML/pcapencoder_medium_classification_20k/evaluation/MediumQAClassification20kustc_binary_raw_split0_mediumQA_20k_20260503.json"
+      },
+      "mask_top_shortcut": {
+        "success": true,
+        "accuracy": 0.7926999926567078,
+        "macro_f1": 0.7857665463641963,
+        "micro_f1": 0.7927,
+        "loss": 0.5220367672950029,
+        "evaluation_file": "code/ShallowML/pcapencoder_medium_classification_20k/evaluation/MediumQAClassification20kustc_binary_mask_top_shortcut_split0_mediumQA_20k_20260503.json"
+      },
+      "delta_raw_minus_mask": {
+        "accuracy": 0.0377500057220459,
+        "accuracy_percentage_points": 3.77500057220459,
+        "macro_f1": 0.04161857944874581,
+        "macro_f1_percentage_points": 4.161857944874581,
+        "loss_mask_minus_raw": 0.038390270853042585
+      }
+    },
+    {
+      "split": 1,
+      "raw": {
+        "success": true,
+        "accuracy": 0.8012499809265137,
+        "macro_f1": 0.7936222660547761,
+        "micro_f1": 0.80125,
+        "loss": 0.5175683695614338,
+        "evaluation_file": "code/ShallowML/pcapencoder_medium_classification_20k/evaluation/MediumQAClassification20kustc_binary_raw_split1_mediumQA_20k_20260503.json"
+      },
+      "mask_top_shortcut": {
+        "success": true,
+        "accuracy": 0.7738500237464905,
+        "macro_f1": 0.7633698388763888,
+        "micro_f1": 0.77385,
+        "loss": 0.5367461328208446,
+        "evaluation_file": "code/ShallowML/pcapencoder_medium_classification_20k/evaluation/MediumQAClassification20kustc_binary_mask_top_shortcut_split1_mediumQA_20k_20260503.json"
+      },
+      "delta_raw_minus_mask": {
+        "accuracy": 0.027399957180023193,
+        "accuracy_percentage_points": 2.7399957180023193,
+        "macro_f1": 0.030252427178387387,
+        "macro_f1_percentage_points": 3.0252427178387387,
+        "loss_mask_minus_raw": 0.019177763259410785
+      }
+    },
+    {
+      "split": 2,
+      "raw": {
+        "success": true,
+        "accuracy": 0.7339000105857849,
+        "macro_f1": 0.7338360541120004,
+        "micro_f1": 0.7339,
+        "loss": 0.5779665436476469,
+        "evaluation_file": "code/ShallowML/pcapencoder_medium_classification_20k/evaluation/MediumQAClassification20kustc_binary_raw_split2_mediumQA_20k_20260503.json"
+      },
+      "mask_top_shortcut": {
+        "success": true,
+        "accuracy": 0.7357000112533569,
+        "macro_f1": 0.7356208739713709,
+        "micro_f1": 0.7357,
+        "loss": 0.575857589033246,
+        "evaluation_file": "code/ShallowML/pcapencoder_medium_classification_20k/evaluation/MediumQAClassification20kustc_binary_mask_top_shortcut_split2_mediumQA_20k_20260503.json"
+      },
+      "delta_raw_minus_mask": {
+        "accuracy": -0.0018000006675720215,
+        "accuracy_percentage_points": -0.18000006675720215,
+        "macro_f1": -0.0017848198593705122,
+        "macro_f1_percentage_points": -0.17848198593705122,
+        "loss_mask_minus_raw": -0.0021089546144008597
+      }
+    }
+  ],
+  "averages": {
+    "raw_macro_f1": 0.7849478153265729,
+    "mask_macro_f1": 0.7615857530706519,
+    "macro_f1_drop_percentage_points": 2.3362062255920897,
+    "accuracy_drop_percentage_points": 2.111665407816569
+  }
+}

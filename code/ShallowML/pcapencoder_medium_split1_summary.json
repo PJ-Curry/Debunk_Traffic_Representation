@@ -1,0 +1,124 @@
+{
+  "date": "2026-05-03",
+  "purpose": "Extend existing medium QA checkpoint Pcap-Encoder downstream classification validation from USTC-binary split0 to split1; raw vs mask_top_shortcut smoke comparison only.",
+  "constraints_respected": {
+    "denoiser_retrained": false,
+    "qa_retrained": false,
+    "full_training": false,
+    "notebooks_modified": false,
+    "raw_pcaps_modified": false,
+    "committed_or_pushed": false,
+    "split0_results_overwritten": false
+  },
+  "medium_qa_checkpoint": {
+    "best_model_path": "code/ShallowML/pcapencoder_medium_checkpoint/results/QA/QA/supervised/t5-base_standard-tokenizer/MediumQAqa_hard_medium_10k_from_denoiser_20260502/task-supervised_lr-0.0005_epochs-1_batch-1/seed_43/best_model",
+    "weights_path": "code/ShallowML/pcapencoder_medium_checkpoint/results/QA/QA/supervised/t5-base_standard-tokenizer/MediumQAqa_hard_medium_10k_from_denoiser_20260502/task-supervised_lr-0.0005_epochs-1_batch-1/seed_43/best_model/weights.pth",
+    "weights_size_bytes": 891733181
+  },
+  "data_generation": {
+    "script": "code/ShallowML/prepare_pcapencoder_ustc_masked_data.py",
+    "split_id": 1,
+    "raw": {
+      "output_dir": "code/ShallowML/pcapencoder_smoke/ustc_binary_raw_split1",
+      "train_rows": 5000,
+      "val_rows": 1000,
+      "test_rows": 5000,
+      "class_distribution": {
+        "train": {
+          "benign": 2500,
+          "malware": 2500
+        },
+        "val": {
+          "benign": 500,
+          "malware": 500
+        },
+        "test": {
+          "benign": 2500,
+          "malware": 2500
+        }
+      }
+    },
+    "mask_top_shortcut": {
+      "output_dir": "code/ShallowML/pcapencoder_smoke/ustc_binary_mask_top_shortcut_split1",
+      "train_rows": 5000,
+      "val_rows": 1000,
+      "test_rows": 5000,
+      "class_distribution": {
+        "train": {
+          "benign": 2500,
+          "malware": 2500
+        },
+        "val": {
+          "benign": 500,
+          "malware": 500
+        },
+        "test": {
+          "benign": 2500,
+          "malware": 2500
+        }
+      }
+    }
+  },
+  "classification": {
+    "output_path": "code/ShallowML/pcapencoder_medium_checkpoint/results/classification_split1",
+    "common_params": {
+      "epochs": 1,
+      "batch_size": 2,
+      "fix_encoder": true,
+      "learning_rate": 0.001,
+      "seed": 43,
+      "bottleneck": "mean",
+      "model_name": "t5-base",
+      "tokenizer_name": "t5-base",
+      "loss": "normal",
+      "percentage": 100,
+      "max_qst_length": 512,
+      "max_ans_length": 32,
+      "max_chunk_length": 512
+    },
+    "raw": {
+      "identifier": "ustc_binary_raw_split1_mediumQA_20260503",
+      "data_dir": "code/ShallowML/pcapencoder_smoke/ustc_binary_raw_split1",
+      "accuracy": 0.8335999846458435,
+      "macro_f1": 0.8312179040152449,
+      "micro_f1": 0.8336,
+      "loss": 0.49549214057922364,
+      "evaluation_file": "code/ShallowML/pcapencoder_medium_checkpoint/evaluation/MediumQAClassificationustc_binary_raw_split1_mediumQA_20260503.json",
+      "log": "code/ShallowML/logs/pcapencoder_medium_classification_raw_split1.log",
+      "result_dir": "code/ShallowML/pcapencoder_medium_checkpoint/results/classification_split1/supervised/t5-base_standard-tokenizer/MediumQAClassificationustc_binary_raw_split1_mediumQA_20260503/task-supervised_lr-0.001_epochs-1_batch-2/seed_43"
+    },
+    "mask_top_shortcut": {
+      "identifier": "ustc_binary_mask_top_shortcut_split1_mediumQA_20260503",
+      "data_dir": "code/ShallowML/pcapencoder_smoke/ustc_binary_mask_top_shortcut_split1",
+      "accuracy": 0.7437999844551086,
+      "macro_f1": 0.7437293820685228,
+      "micro_f1": 0.7438,
+      "loss": 0.5638063217043877,
+      "evaluation_file": "code/ShallowML/pcapencoder_medium_checkpoint/evaluation/MediumQAClassificationustc_binary_mask_top_shortcut_split1_mediumQA_20260503.json",
+      "log": "code/ShallowML/logs/pcapencoder_medium_classification_mask_split1.log",
+      "result_dir": "code/ShallowML/pcapencoder_medium_checkpoint/results/classification_split1/supervised/t5-base_standard-tokenizer/MediumQAClassificationustc_binary_mask_top_shortcut_split1_mediumQA_20260503/task-supervised_lr-0.001_epochs-1_batch-2/seed_43"
+    },
+    "delta_raw_minus_mask": {
+      "accuracy": 0.08980000019073486,
+      "accuracy_percentage_points": 8.980000019073486,
+      "macro_f1": 0.08748852194672208,
+      "macro_f1_percentage_points": 8.748852194672207,
+      "loss_mask_minus_raw": 0.06831418112516408
+    },
+    "comparison_with_split0": {
+      "split0_raw_macro_f1": 0.8367163947598122,
+      "split0_mask_macro_f1": 0.7452356362230657,
+      "split0_macro_f1_drop_percentage_points": 9.148075853674646,
+      "split1_macro_f1_drop_percentage_points": 8.748852194672207,
+      "trend": "Consistent: mask_top_shortcut lowers accuracy and macro F1 on split1 by a similar magnitude to split0."
+    }
+  },
+  "recommendation": {
+    "continue_split2": true,
+    "reason": "split0 and split1 show consistent raw-to-mask degradation; split2 is worthwhile as a low-incremental-cost third split for stronger multi-split evidence."
+  },
+  "notes": [
+    "The raw split1 log contains one initial failed launch caused by a missing PYTHONPATH; the successful rerun used the same intended classification parameters.",
+    "Generated downstream classification checkpoints and weights should not be committed."
+  ]
+}

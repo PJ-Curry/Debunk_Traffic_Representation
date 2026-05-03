@@ -52,3 +52,9 @@ code/ShallowML/pcapencoder_mini_checkpoint/
 *.safetensors
 .codex
 .codex/
+
+# Pcap-Encoder local medium experiment artifacts
+code/ShallowML/pcapencoder_medium_checkpoint/
+code/ShallowML/pcapencoder_medium_classification_20k/
+code/ShallowML/pcapencoder_medium_classification_50k/
+code/ShallowML/pcapencoder_medium_classification_100k/
