@@ -1,0 +1,108 @@
+{
+  "date": "2026-05-02",
+  "purpose": "Pcap-Encoder medium mini Denoiser -> QA -> Classification smoke test on USTC-binary split0; not a formal Pcap-Encoder reproduction result.",
+  "hardware_observation": {
+    "gpu": "NVIDIA GeForce RTX 4060 Laptop GPU",
+    "gpu_memory_mb": 8188,
+    "oom_observed": false,
+    "notes": "Denoiser/QA batch_size=2 failed due a transformers/T5 decoder causal-mask tensor shape RuntimeError, not CUDA OOM. batch_size=1 completed. Classification with --fix_encoder and batch_size=2 completed."
+  },
+  "denoiser": {
+    "train_rows": 10000,
+    "test_rows": 2000,
+    "train_data": "code/ShallowML/pcapencoder_medium_checkpoint/data/denoiser_train_10k.parquet",
+    "test_data": "code/ShallowML/pcapencoder_medium_checkpoint/data/denoiser_test_2k.parquet",
+    "epochs": 1,
+    "attempted_batch_size": 2,
+    "batch_size": 1,
+    "model_name": "t5-base",
+    "tokenizer_name": "t5-base",
+    "finetuned_path_model": "Empty",
+    "weights_generated": true,
+    "weights_path": "code/ShallowML/pcapencoder_medium_checkpoint/results/denoiser/denoiser/supervised/t5-base_standard-tokenizer/MediumDenoiserdenoiser_medium_10k_20260502/task-supervised_lr-5e-06_epochs-1_batch-1/seed_43/best_model/weights.pth",
+    "weights_size_bytes": 891733181,
+    "log": "code/ShallowML/logs/pcapencoder_medium_denoiser.log"
+  },
+  "qa": {
+    "train_rows": 10000,
+    "test_rows": 2000,
+    "train_data": "code/ShallowML/pcapencoder_medium_checkpoint/data/qa_train_hard_10k.parquet",
+    "test_data": "code/ShallowML/pcapencoder_medium_checkpoint/data/qa_test_hard_2k.parquet",
+    "epochs": 1,
+    "attempted_batch_size": 2,
+    "batch_size": 1,
+    "learning_rate": 0.0005,
+    "model_name": "t5-base",
+    "tokenizer_name": "t5-base",
+    "initialized_from": "medium Denoiser best_model",
+    "weights_generated": true,
+    "weights_path": "code/ShallowML/pcapencoder_medium_checkpoint/results/QA/QA/supervised/t5-base_standard-tokenizer/MediumQAqa_hard_medium_10k_from_denoiser_20260502/task-supervised_lr-0.0005_epochs-1_batch-1/seed_43/best_model/weights.pth",
+    "weights_size_bytes": 891733181,
+    "evaluation": {
+      "loss": 1.8561962609813454,
+      "Total_accuracy": 19.4,
+      "accdstIP": 0.0,
+      "accIPttl": 2.73,
+      "accsrcIP": 0.0,
+      "acclen_payload": 52.21,
+      "accchk3L": 0.0,
+      "accchecksum_check": 61.51,
+      "acclast_header3L_byte": 33.46,
+      "accIPid": 11.97
+    },
+    "log": "code/ShallowML/logs/pcapencoder_medium_QA.log"
+  },
+  "classification": {
+    "checkpoint": "medium QA best_model",
+    "common_params": {
+      "epochs": 1,
+      "batch_size": 2,
+      "fix_encoder": true,
+      "learning_rate": 0.001,
+      "loss": "normal"
+    },
+    "raw": {
+      "data_dir": "code/ShallowML/pcapencoder_smoke/ustc_binary_raw_split0",
+      "accuracy": 0.8393999934196472,
+      "macro_f1": 0.8367163947598122,
+      "micro_f1": 0.8394,
+      "loss": 0.5134910672068596,
+      "log": "code/ShallowML/logs/pcapencoder_medium_classification_raw.log",
+      "evaluation_file": "code/ShallowML/pcapencoder_medium_checkpoint/evaluation/MediumQAClassificationustc_binary_raw_split0_mediumQA_20260502.json"
+    },
+    "mask_top_shortcut": {
+      "data_dir": "code/ShallowML/pcapencoder_smoke/ustc_binary_mask_top_shortcut_split0",
+      "accuracy": 0.7454000115394592,
+      "macro_f1": 0.7452356362230657,
+      "micro_f1": 0.7454,
+      "loss": 0.5508133111715316,
+      "log": "code/ShallowML/logs/pcapencoder_medium_classification_mask.log",
+      "evaluation_file": "code/ShallowML/pcapencoder_medium_checkpoint/evaluation/MediumQAClassificationustc_binary_mask_top_shortcut_split0_mediumQA_20260502.json"
+    },
+    "delta_mask_minus_raw": {
+      "accuracy": -0.09399998188018799,
+      "accuracy_percentage_points": -9.399998188018799,
+      "macro_f1": -0.09148075853674646,
+      "macro_f1_percentage_points": -9.148075853674646,
+      "loss": 0.037322243964672025
+    },
+    "comparison_with_2k_mini": {
+      "previous_accuracy_drop_percentage_points": 4.539996385574343,
+      "previous_macro_f1_drop_percentage_points": 4.4451568509092805,
+      "medium_accuracy_drop_percentage_points": 9.399998188018799,
+      "medium_macro_f1_drop_percentage_points": 9.148075853674646,
+      "trend": "Consistent direction with the 2k mini checkpoint; the medium mini checkpoint shows a larger raw-vs-mask gap."
+    }
+  },
+  "interpretation": {
+    "can_say": [
+      "The medium mini checkpoint pipeline can generate Denoiser and QA weights and use the medium QA checkpoint for downstream classification.",
+      "The raw vs mask_top_shortcut direction matches the ShallowML and 2k mini Pcap-Encoder observations in this smoke setting."
+    ],
+    "cannot_say": [
+      "This is not a formal Pcap-Encoder reproduction result.",
+      "The checkpoint is trained for only one epoch on mini data.",
+      "The raw-vs-mask gap is not a formal shortcut migration conclusion without larger training and multi-split or multi-seed evaluation."
+    ]
+  }
+}

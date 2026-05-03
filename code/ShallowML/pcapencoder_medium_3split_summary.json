@@ -1,0 +1,142 @@
+{
+  "date": "2026-05-03",
+  "purpose": "USTC-binary split0/split1/split2 raw vs mask_top_shortcut Pcap-Encoder downstream classification comparison using the existing medium QA checkpoint.",
+  "constraints_respected": {
+    "denoiser_retrained": false,
+    "qa_retrained": false,
+    "full_training": false,
+    "notebooks_modified": false,
+    "raw_pcaps_modified": false,
+    "split0_or_split1_overwritten": false,
+    "committed_or_pushed": false,
+    "weights_copied": false
+  },
+  "medium_qa_checkpoint": {
+    "best_model_path": "/home/a/traffic_encryption/Debunk_Traffic_Representation/code/ShallowML/pcapencoder_medium_checkpoint/results/QA/QA/supervised/t5-base_standard-tokenizer/MediumQAqa_hard_medium_10k_from_denoiser_20260502/task-supervised_lr-0.0005_epochs-1_batch-1/seed_43/best_model"
+  },
+  "split2": {
+    "success": {
+      "raw": true,
+      "mask_top_shortcut": true
+    },
+    "data": {
+      "raw_dir": "code/ShallowML/pcapencoder_smoke/ustc_binary_raw_split2",
+      "mask_top_shortcut_dir": "code/ShallowML/pcapencoder_smoke/ustc_binary_mask_top_shortcut_split2",
+      "train_rows": 5000,
+      "val_rows": 1000,
+      "test_rows": 5000,
+      "class_distribution": {
+        "train": {
+          "benign": 2500,
+          "malware": 2500
+        },
+        "val": {
+          "benign": 500,
+          "malware": 500
+        },
+        "test": {
+          "benign": 2500,
+          "malware": 2500
+        }
+      }
+    },
+    "classification": {
+      "output_path": "code/ShallowML/pcapencoder_medium_checkpoint/results/classification_split2",
+      "common_params": {
+        "epochs": 1,
+        "batch_size": 2,
+        "fix_encoder": true,
+        "input_format": "every4",
+        "bottleneck": "mean",
+        "learning_rate": 0.001,
+        "seed": 43,
+        "model_name": "t5-base",
+        "tokenizer_name": "t5-base",
+        "percentage": 100
+      },
+      "raw": {
+        "accuracy": 0.8375999927520752,
+        "macro_f1": 0.8341220299672036,
+        "micro_f1": 0.8376,
+        "loss": 0.5142037067890167,
+        "evaluation_file": "code/ShallowML/pcapencoder_medium_checkpoint/evaluation/MediumQAClassificationustc_binary_raw_split2_mediumQA_20260503.json",
+        "log": "code/ShallowML/logs/pcapencoder_medium_classification_split2_raw.log"
+      },
+      "mask_top_shortcut": {
+        "accuracy": 0.7698000073432922,
+        "macro_f1": 0.7685802419963044,
+        "micro_f1": 0.7698,
+        "loss": 0.553369201529026,
+        "evaluation_file": "code/ShallowML/pcapencoder_medium_checkpoint/evaluation/MediumQAClassificationustc_binary_mask_top_shortcut_split2_mediumQA_20260503.json",
+        "log": "code/ShallowML/logs/pcapencoder_medium_classification_split2_mask.log"
+      },
+      "delta_raw_minus_mask": {
+        "accuracy": 0.06779998540878296,
+        "accuracy_percentage_points": 6.779998540878296,
+        "macro_f1": 0.06554178797089927,
+        "macro_f1_percentage_points": 6.554178797089927,
+        "loss_mask_minus_raw": 0.0391654947400093
+      }
+    }
+  },
+  "three_split_summary": {
+    "split0": {
+      "raw_accuracy": 0.8393999934196472,
+      "mask_accuracy": 0.7454000115394592,
+      "accuracy_drop_percentage_points": 9.399998188018799,
+      "raw_macro_f1": 0.8367163947598122,
+      "mask_macro_f1": 0.7452356362230657,
+      "macro_f1_drop_percentage_points": 9.148075853674653,
+      "raw_loss": 0.5134910672068596,
+      "mask_loss": 0.5508133111715316,
+      "loss_mask_minus_raw": 0.0373222439646721
+    },
+    "split1": {
+      "raw_accuracy": 0.8335999846458435,
+      "mask_accuracy": 0.7437999844551086,
+      "accuracy_drop_percentage_points": 8.980000019073486,
+      "raw_macro_f1": 0.8312179040152449,
+      "mask_macro_f1": 0.7437293820685228,
+      "macro_f1_drop_percentage_points": 8.748852194672207,
+      "raw_loss": 0.49549214057922364,
+      "mask_loss": 0.5638063217043877,
+      "loss_mask_minus_raw": 0.06831418112516408
+    },
+    "split2": {
+      "raw_accuracy": 0.8375999927520752,
+      "mask_accuracy": 0.7698000073432922,
+      "accuracy_drop_percentage_points": 6.779998540878296,
+      "raw_macro_f1": 0.8341220299672036,
+      "mask_macro_f1": 0.7685802419963044,
+      "macro_f1_drop_percentage_points": 6.554178797089927,
+      "raw_loss": 0.5142037067890167,
+      "mask_loss": 0.553369201529026,
+      "loss_mask_minus_raw": 0.0391654947400093
+    },
+    "averages": {
+      "raw_macro_f1": 0.8340187762474202,
+      "mask_macro_f1": 0.752515086762631,
+      "macro_f1_drop_percentage_points": 8.15036894847893,
+      "accuracy_drop_percentage_points": 8.38666558265686
+    },
+    "trend": "Consistent raw-to-mask degradation on split0, split1, and split2."
+  },
+  "interpretation": {
+    "supports": "In the current medium QA checkpoint smoke setting, mask_top_shortcut has a stable effect on Pcap-Encoder downstream classification.",
+    "does_not_show": [
+      "Not a formal full-scale Pcap-Encoder reproduction.",
+      "Not a multi-seed statistical result.",
+      "Not a complete paper reproduction.",
+      "Does not establish the exact shortcut effect size under full-data or larger-checkpoint settings."
+    ]
+  },
+  "recommendation": {
+    "close_current_stage": true,
+    "preferred_next_step": "Prepare a stage report for the advisor before expanding checkpoint scale.",
+    "later_options": [
+      "Larger checkpoint scale.",
+      "More seeds.",
+      "Full-data classification."
+    ]
+  }
+}
