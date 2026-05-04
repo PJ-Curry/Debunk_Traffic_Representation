@@ -1,0 +1,138 @@
+{
+  "version": "2026-05-04",
+  "dataset": "USTC-binary",
+  "representation_notes": {
+    "shallowml_raw": "Ethernet removed; IPv4/IPv6 addresses zeroed; TCP/UDP ports zeroed; TCP/UDP payload removed; bytes are padded and encoded as 16-bit token columns.",
+    "pcapencoder_raw": "Ethernet removed; IPv4/IPv6 addresses zeroed; TCP/UDP ports zeroed; payload retained before conversion to Pcap-Encoder context text.",
+    "column_rule": "column k corresponds to cleaned packet bytes [2k, 2k+2)."
+  },
+  "groups": [
+    {
+      "group_name": "ip_basic",
+      "semantic_fields": [
+        {"protocol": "IPv4", "field_name": "total_length"},
+        {"protocol": "IPv4", "field_name": "identification"},
+        {"protocol": "IPv4", "field_name": "flags_fragment"},
+        {"protocol": "IPv4", "field_name": "ttl"},
+        {"protocol": "IPv4", "field_name": "protocol"},
+        {"protocol": "IPv4", "field_name": "ip_checksum"}
+      ],
+      "columns": [1, 2, 3, 4, 5],
+      "mask_mode": "zero",
+      "applies_to": "both",
+      "semantic_risk_score": 0.70,
+      "note": "IPv4 basic header fields. total_length can be legitimate packet-size signal or dataset artifact; TTL/protocol/IP ID/checksum are higher shortcut-risk fields."
+    },
+    {
+      "group_name": "ip_ttl_protocol",
+      "semantic_fields": [
+        {"protocol": "IPv4", "field_name": "ttl"},
+        {"protocol": "IPv4", "field_name": "protocol"}
+      ],
+      "columns": [4],
+      "mask_mode": "zero",
+      "applies_to": "both",
+      "semantic_risk_score": 0.95,
+      "note": "Column 4 in common IPv4/IHL=5 packets. TTL is strongly tied to OS/network path/capture environment, while protocol is a coarse transport indicator."
+    },
+    {
+      "group_name": "ip_len_id_checksum",
+      "semantic_fields": [
+        {"protocol": "IPv4", "field_name": "total_length"},
+        {"protocol": "IPv4", "field_name": "identification"},
+        {"protocol": "IPv4", "field_name": "ip_checksum"}
+      ],
+      "columns": [1, 2, 5],
+      "mask_mode": "zero",
+      "applies_to": "both",
+      "semantic_risk_score": 0.70,
+      "note": "Length is mixed evidence; IP ID/checksum can reflect stack/capture artifacts and packet construction."
+    },
+    {
+      "group_name": "tcp_seq_ack",
+      "semantic_fields": [
+        {"protocol": "TCP", "field_name": "seq"},
+        {"protocol": "TCP", "field_name": "ack"}
+      ],
+      "columns": [12, 13, 14, 15],
+      "mask_mode": "zero",
+      "applies_to": "both",
+      "semantic_risk_score": 0.75,
+      "note": "Seq/Ack can encode implicit flow identity in packet-level splits. Ports are already zeroed, but sequence space may still leak flow/session structure."
+    },
+    {
+      "group_name": "tcp_flags_window",
+      "semantic_fields": [
+        {"protocol": "TCP", "field_name": "data_offset_reserved_flags"},
+        {"protocol": "TCP", "field_name": "window"}
+      ],
+      "columns": [16, 17],
+      "mask_mode": "zero",
+      "applies_to": "both",
+      "semantic_risk_score": 0.70,
+      "note": "TCP flags and window size can reflect packet role, OS defaults, application stack, and trace construction."
+    },
+    {
+      "group_name": "tcp_checksum_urgent",
+      "semantic_fields": [
+        {"protocol": "TCP", "field_name": "tcp_checksum"},
+        {"protocol": "TCP", "field_name": "urgent_pointer"}
+      ],
+      "columns": [18, 19],
+      "mask_mode": "zero",
+      "applies_to": "both",
+      "semantic_risk_score": 0.60,
+      "note": "Checksum can be an artifact after IP/port normalization; urgent pointer is usually zero but still included for field-complete TCP header masking."
+    },
+    {
+      "group_name": "tcp_options",
+      "semantic_fields": [
+        {"protocol": "TCP", "field_name": "tcp_options"}
+      ],
+      "columns": [20, 21, 22, 23, 24, 25],
+      "mask_mode": "zero",
+      "applies_to": "both",
+      "semantic_risk_score": 0.95,
+      "note": "Must be located dynamically from TCP data offset. Do not use a fixed offset when the TCP header is short, because bytes after the TCP header are payload in Pcap-Encoder and padding in ShallowML."
+    },
+    {
+      "group_name": "udp_len_checksum",
+      "semantic_fields": [
+        {"protocol": "UDP", "field_name": "udp_length"},
+        {"protocol": "UDP", "field_name": "udp_checksum"}
+      ],
+      "columns": [12, 13],
+      "mask_mode": "zero",
+      "applies_to": "both",
+      "semantic_risk_score": 0.55,
+      "note": "Only applies to UDP packets. On TCP-only subsets this group should be skipped in pcap-aware masking; default columns are only for lightweight CSV scoring."
+    },
+    {
+      "group_name": "current_mask_top_shortcut_columns",
+      "semantic_fields": [
+        {"protocol": "IPv4", "field_name": "ttl"},
+        {"protocol": "IPv4", "field_name": "protocol"},
+        {"protocol": "TCP", "field_name": "data_offset_reserved_flags"},
+        {"protocol": "TCP", "field_name": "window"},
+        {"protocol": "TCP", "field_name": "tcp_options"}
+      ],
+      "columns": [4, 16, 17, 20, 21, 22, 23, 24, 25],
+      "mask_mode": "zero",
+      "applies_to": "both",
+      "semantic_risk_score": 0.90,
+      "note": "Legacy manual/semimanual mask_top_shortcut kept as the old-method control."
+    },
+    {
+      "group_name": "random_same_size",
+      "semantic_fields": [],
+      "columns": [],
+      "column_count": 9,
+      "exclude_columns": [4, 16, 17, 20, 21, 22, 23, 24, 25],
+      "random_seed": 43,
+      "mask_mode": "permute",
+      "applies_to": "ShallowML",
+      "semantic_risk_score": 0.10,
+      "note": "Sanity-check baseline: randomly selected non-shortcut columns with the same cardinality as current_mask_top_shortcut."
+    }
+  ]
+}

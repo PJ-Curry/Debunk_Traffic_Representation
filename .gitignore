@@ -58,3 +58,7 @@ code/ShallowML/pcapencoder_medium_checkpoint/
 code/ShallowML/pcapencoder_medium_classification_20k/
 code/ShallowML/pcapencoder_medium_classification_50k/
 code/ShallowML/pcapencoder_medium_classification_100k/
+
+# Large local field mapping artifacts
+code/ShallowML/field_column_mapping_ustc_sample.csv
+code/ShallowML/outputs/ustc-binary/field_masks/
